@@ -9,3 +9,6 @@ class TDL_ObjectNotFoundError(BaseAppException):
 
 class TDL_ObjectDuplicationError(BaseAppException):
     """Errors referred to object duplication and repitition such as Task objects and Collection objects."""
+
+class TDL_CollectionFullError(BaseAppException):
+    """Raised when we call the createTask() function in the Collection class when the class is full."""

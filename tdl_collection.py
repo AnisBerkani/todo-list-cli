@@ -1,14 +1,20 @@
-from errors import TDL_AttributeError, TDL_ObjectNotFoundError, TDL_ObjectDuplicationError
+from errors import TDL_AttributeError, TDL_ObjectNotFoundError, TDL_ObjectDuplicationError, TDL_CollectionFullError
 from task import Task
+from math import inf
 
 class Collection:
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, collection_type: str = "default") -> None:
         self.name = name
 
         self.data : list[Task] = []
+        self._type = collection_type
 
     def __len__(self) -> int:
         return len(self.data)
+
+    @property
+    def max_length(self):
+        return inf if self._type == "default" else 20
 
     @property
     def name(self) -> str:
@@ -42,6 +48,9 @@ class Collection:
         if self._task_exists(name):
             raise TDL_ObjectDuplicationError(f"Task: {name} already exists. You are not allowed to duplicate tasks.")
         
+        if len(self.data) >= self.max_length:
+            raise TDL_CollectionFullError(f"Collection: {self.name} is full. Please create another collection") 
+
         task = Task(name, description)
         self.data.append(task)
 

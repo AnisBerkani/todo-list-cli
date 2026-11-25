@@ -1,7 +1,7 @@
 from os import get_terminal_size, system
 
 from tasklist import TaskList
-from errors import TDL_AttributeError, TDL_ObjectNotFoundError, TDL_ObjectDuplicationError
+from errors import TDL_AttributeError, TDL_ObjectNotFoundError, TDL_ObjectDuplicationError, TDL_CollectionFullError
 
 TERMINAL_WIDTH, _ = get_terminal_size()
 
@@ -34,7 +34,7 @@ class App:
                 user_choice = int(self.get_input())
             
             except ValueError:
-                print(f"Error: please tap one of the existent keys.")
+                print(f"[Error] Please tap one of the existent keys.")
                 self.get_input("Tap Enter to continue...")
                 system("cls")
                 continue
@@ -45,12 +45,12 @@ class App:
                 self.process(action)
 
             except KeyError:
-                print("Error: please tap one of the avaible actions.")
+                print("[Error] Please tap one of the avaible actions.")
                 continue
 
     def process(self, callback_function):
         callback_function()
-        self.get_input(char="tap enter to continue...")
+        self.get_input(char="Tap enter to continue...")
         system("cls")
 
     def _show_header(self):
@@ -92,10 +92,10 @@ class App:
             self.data_model.create_collection(collection_name)
 
         except TDL_ObjectDuplicationError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
         except TDL_AttributeError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
     def _read_avaible_collections(self):
         collections_avaible = self.data_model.get_data()
@@ -112,10 +112,10 @@ class App:
             collection.name = new_name
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
         except TDL_AttributeError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
     def _delete_collection(self):
         collection_name = self.get_input()
@@ -124,7 +124,7 @@ class App:
             self.data_model.delete_collection(collection_name)
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
     def _clear_collection(self):
         collection_name = self.get_input()
@@ -135,7 +135,7 @@ class App:
             collection.clear_collection()
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
 
     def _create_task(self):
@@ -149,13 +149,16 @@ class App:
             collection.create_task(task_name, task_description)
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
+
+        except TDL_CollectionFullError as error_feedback:
+            print(f"[Error] {error_feedback}")
 
         except TDL_ObjectDuplicationError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
         except TDL_AttributeError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
             
     def _read_avaible_tasks(self):
         collection_name = self.get_input()
@@ -168,7 +171,7 @@ class App:
                 print(f"{index}- {task.name}")
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
     def _update_task_properties(self):
         collection_name = self.get_input()
@@ -188,10 +191,10 @@ class App:
                 task.description = new_description
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
         except TDL_AttributeError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
     def _delete_task(self):
         collection_name = self.get_input()
@@ -202,7 +205,7 @@ class App:
             collection.delete_task(task_name)
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
     def _update_task_status(self):
         collection_name = self.get_input()
@@ -215,7 +218,7 @@ class App:
             task.toggle_status()
 
         except TDL_ObjectNotFoundError as error_feedback:
-            print(f"Error: {error_feedback}")
+            print(f"[Error] {error_feedback}")
 
 
 #clearing the terminal
